@@ -489,129 +489,127 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loginForm = document.getElementById('loginForm');
-            const loginBtn = document.getElementById('loginBtn');
-            const alertContainer = document.getElementById('alertContainer');
-            
-            // Demo credentials (in a real app, this would be handled server-side)
-            const validCredentials = {
-                username: 'pilot123',
-                password: 'flysafe2023',
-                license: 'FAA-789456123'
-            };
-            
-            // Function to show alert
-            function showAlert(message, type) {
-                alertContainer.innerHTML = `
-                    <div class="alert alert-${type} fade-in">
-                        <i class="fas fa-${type === 'danger' ? 'exclamation-triangle' : 'check-circle'}"></i>
-                        ${message}
-                    </div>
-                `;
-                
-                // Auto remove alert after 5 seconds
-                setTimeout(() => {
-                    const alert = document.querySelector('.alert');
-                    if (alert) {
-                        alert.remove();
-                    }
-                }, 5000);
-            }
-            
-            // Function to simulate login process
-            function loginUser(username, password, license) {
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        // Check if credentials match
-                        if (username === validCredentials.username && 
-                            password === validCredentials.password && 
-                            license === validCredentials.license) {
-                            resolve({ success: true, message: 'Login successful!' });
-                        } else {
-                            resolve({ success: false, message: 'Invalid credentials. Please try again.' });
-                        }
-                    }, 1500); // Simulate API call delay
-                });
-            }
-            
-            // Handle form submission
-            loginForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                // Get form values
-                const username = document.getElementById('username').value.trim();
-                const password = document.getElementById('password').value;
-                const license = document.getElementById('license').value.trim();
-                
-                // Basic validation
-                if (!username || !password || !license) {
-                    showAlert('Please fill in all fields.', 'danger');
-                    return;
+       document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const alertContainer = document.getElementById('alertContainer');
+
+        // defensive check so failures are obvious
+        if (!loginForm || !loginBtn || !alertContainer) {
+            console.error('Missing element(s):',
+                { loginForm: !!loginForm, loginBtn: !!loginBtn, alertContainer: !!alertContainer });
+            return;
+        }
+        console.log('Login script initialized — redirect will go to "html/page.html"');
+
+        // Demo credentials (kept for reference; login will accept anything)
+        const validCredentials = {
+            username: 'pilot123',
+            password: 'flysafe2023',
+            license: 'FAA-789456123'
+        };
+
+        // Function to show alert
+        function showAlert(message, type) {
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} fade-in">
+                    <i class="fas fa-${type === 'danger' ? 'exclamation-triangle' : 'check-circle'}"></i>
+                    ${message}
+                </div>
+            `;
+
+            // Auto remove alert after 5 seconds
+            setTimeout(() => {
+                const alert = document.querySelector('.alert');
+                if (alert) {
+                    alert.remove();
                 }
-                
-                // Show loading state
-                loginBtn.innerHTML = 'Authenticating...';
-                loginBtn.classList.add('btn-loading');
-                loginBtn.disabled = true;
-                
-                try {
-                    // Attempt login
-                    const result = await loginUser(username, password, license);
-                    
-                    if (result.success) {
-                        showAlert(result.message, 'success');
-                        
-                        // Store login state (in a real app, this would be a secure token)
-                        localStorage.setItem('isLoggedIn', 'true');
-                        localStorage.setItem('username', username);
-                        
-                        // Redirect to main app after a brief delay
-                        setTimeout(() => {
-                            window.location.href = 'html/page.html';
-                        }, 1500);
-                    } else {
-                        showAlert(result.message, 'danger');
-                        
-                        // Reset button state
-                        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Logbook';
-                        loginBtn.classList.remove('btn-loading');
-                        loginBtn.disabled = false;
-                    }
-                } catch (error) {
-                    console.error('Login error:', error);
-                    showAlert('An error occurred during login. Please try again.', 'danger');
-                    
+            }, 5000);
+        }
+
+        // Function to simulate login process — accepts anything as successful
+        function loginUser(username, password, license) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // Accept anything as a successful login (demo mode)
+                    resolve({ success: true, message: 'Login successful!' });
+                }, 1500); // Simulate API call delay
+            });
+        }
+
+        // Handle form submission
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const license = document.getElementById('license').value.trim();
+
+            // NOTE: validation removed so ANY input (including empty) will be accepted
+
+            // Show loading state
+            loginBtn.innerHTML = 'Authenticating...';
+            loginBtn.classList.add('btn-loading');
+            loginBtn.disabled = true;
+
+            try {
+                // Attempt login (now always successful)
+                const result = await loginUser(username, password, license);
+
+                if (result.success) {
+                    showAlert(result.message, 'success');
+
+                    // Store login state (in a real app, this would be a secure token)
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('username', username);
+
+                    // Redirect to main app after a brief delay (use lowercase folder and replace)
+                    setTimeout(() => {
+                        window.location.replace('html/page.html');
+                    }, 1500);
+                } else {
+                    showAlert(result.message, 'danger');
+
                     // Reset button state
                     loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Logbook';
                     loginBtn.classList.remove('btn-loading');
                     loginBtn.disabled = false;
                 }
-            });
-            
-            // Check if user is already logged in (for demo purposes)
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            if (isLoggedIn === 'true') {
-                showAlert('You are already logged in. Redirecting...', 'success');
-                setTimeout(() => {
-                    window.location.href = 'HTML/page.html';
-                }, 2000);
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert('An error occurred during login. Please try again.', 'danger');
+
+                // Reset button state
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Logbook';
+                loginBtn.classList.remove('btn-loading');
+                loginBtn.disabled = false;
             }
-            
-            // Add input animations
-            const inputs = document.querySelectorAll('.form-control');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.classList.add('focused');
-                });
-                
-                input.addEventListener('blur', function() {
-                    if (this.value === '') {
-                        this.parentElement.classList.remove('focused');
-                    }
-                });
+        });
+
+        // Check if user is already logged in (for demo purposes)
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (isLoggedIn === 'true') {
+            showAlert('You are already logged in. Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.replace('html/page.html');
+            }, 2000);
+        }
+
+        // Add input animations
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+
+            input.addEventListener('blur', function() {
+                if (this.value === '') {
+                    this.parentElement.classList.remove('focused');
+                }
             });
         });
+    });
     </script>
 </body>
 </html>
