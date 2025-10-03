@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyLog Pro | Pilot Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0a2540;
+            --secondary: #1d4e89;
+            --accent: #3a86ff;
+            --gold: #ffd166;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #06d6a0;
+            --danger: #ef476f;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.15);
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a2540 0%, #1d4e89 100%);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://cdn.pixabay.com/photo/2018/09/25/17/14/airplane-3702676_960_720.jpg') no-repeat center center;
+            background-size: cover;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+        }
+
+        .logo-text {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-tagline {
+            font-size: 1.1rem;
+            max-width: 400px;
+            margin: 0 auto;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        /* Login Card Styles */
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius-xl);
+            padding: 2.5rem 2rem;
+            box-shadow: var(--shadow-xl);
+            color: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--gray-600);
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+            color: var(--gray-800);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.15);
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+
+        .remember-me input {
+            width: 16px;
+            height: 16px;
+        }
+
+        .forgot-password {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .forgot-password:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.85rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background: #2a75e6;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-google {
+            background: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+            margin-top: 1rem;
+        }
+
+        .btn-google:hover {
+            background: var(--gray-100);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: var(--gray-500);
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-300);
+        }
+
+        .login-divider span {
+            padding: 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .login-footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .login-footer a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* Alert Styles */
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .alert-danger {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 71, 111, 0.2);
+        }
+
+        .alert-success {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(6, 214, 160, 0.2);
+        }
+
+        /* Demo Credentials */
+        .demo-credentials {
+            background: rgba(10, 37, 64, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+
+        .demo-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .demo-item {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .logo-text {
+                font-size: 1.8rem;
+            }
+            
+            .logo-icon {
+                font-size: 2rem;
+            }
+            
+            .login-title {
+                font-size: 1.5rem;
+            }
+            
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Loading State */
+        .btn-loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-header fade-in">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-plane-departure"></i>
+                </div>
+                <div class="logo-text">SkyLog Pro</div>
+            </div>
+            <div class="logo-subtitle">Professional Pilot Logbook</div>
+            <p class="login-tagline">Track, manage, and analyze your flight records with our secure aviation logbook system.</p>
+        </div>
+
+        <div class="login-card fade-in">
+            <h1 class="login-title">Pilot Login</h1>
+            <p class="login-subtitle">Enter your credentials to access your flight log</p>
+
+            <div id="alertContainer"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username or Pilot ID</label>
+                    <div class="input-with-icon">
+                        <input type="text" id="username" class="form-control" placeholder="Enter your username or ID" required>
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-with-icon">
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="license" class="form-label">Pilot License Number</label>
+                    <div class="input-with-icon">
+                        <input type="text" id="license" class="form-control" placeholder="Enter your license number" required>
+                        <i class="fas fa-id-card input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login to Logbook
+                </button>
+
+                <div class="login-divider">
+                    <span>or continue with</span>
+                </div>
+
+                <button type="button" class="btn btn-google">
+                    <i class="fab fa-google"></i> Google Account
+                </button>
+            </form>
+
+            <!--
+            <div class="demo-credentials">
+                <div class="demo-title">Demo Credentials (for testing):</div>
+                <div class="demo-item"><strong>Username:</strong> pilot123</div>
+                <div class="demo-item"><strong>Password:</strong> flysafe2023</div>
+                <div class="demo-item"><strong>License:</strong> FAA-789456123</div>
+            </div>
+            -->
+
+            <div class="login-footer">
+                Don't have an account? <a href="#">Contact Administrator</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const loginBtn = document.getElementById('loginBtn');
+            const alertContainer = document.getElementById('alertContainer');
+            
+            // Demo credentials (in a real app, this would be handled server-side)
+            const validCredentials = {
+                username: 'pilot123',
+                password: 'flysafe2023',
+                license: 'FAA-789456123'
+            };
+            
+            // Function to show alert
+            function showAlert(message, type) {
+                alertContainer.innerHTML = `
+                    <div class="alert alert-${type} fade-in">
+                        <i class="fas fa-${type === 'danger' ? 'exclamation-triangle' : 'check-circle'}"></i>
+                        ${message}
+                    </div>
+                `;
+                
+                // Auto remove alert after 5 seconds
+                setTimeout(() => {
+                    const alert = document.querySelector('.alert');
+                    if (alert) {
+                        alert.remove();
+                    }
+                }, 5000);
+            }
+            
+            // Function to simulate login process
+            function loginUser(username, password, license) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        // Check if credentials match
+                        if (username === validCredentials.username && 
+                            password === validCredentials.password && 
+                            license === validCredentials.license) {
+                            resolve({ success: true, message: 'Login successful!' });
+                        } else {
+                            resolve({ success: false, message: 'Invalid credentials. Please try again.' });
+                        }
+                    }, 1500); // Simulate API call delay
+                });
+            }
+            
+            // Handle form submission
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                const license = document.getElementById('license').value.trim();
+                
+                // Basic validation
+                if (!username || !password || !license) {
+                    showAlert('Please fill in all fields.', 'danger');
+                    return;
+                }
+                
+                // Show loading state
+                loginBtn.innerHTML = 'Authenticating...';
+                loginBtn.classList.add('btn-loading');
+                loginBtn.disabled = true;
+                
+                try {
+                    // Attempt login
+                    const result = await loginUser(username, password, license);
+                    
+                    if (result.success) {
+                        showAlert(result.message, 'success');
+                        
+                        // Store login state (in a real app, this would be a secure token)
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('username', username);
+                        
+                        // Redirect to main app after a brief delay
+                        setTimeout(() => {
+                            window.location.href = 'HTML/page.html';
+                        }, 1500);
+                    } else {
+                        showAlert(result.message, 'danger');
+                        
+                        // Reset button state
+                        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Logbook';
+                        loginBtn.classList.remove('btn-loading');
+                        loginBtn.disabled = false;
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    showAlert('An error occurred during login. Please try again.', 'danger');
+                    
+                    // Reset button state
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Logbook';
+                    loginBtn.classList.remove('btn-loading');
+                    loginBtn.disabled = false;
+                }
+            });
+            
+            // Check if user is already logged in (for demo purposes)
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (isLoggedIn === 'true') {
+                showAlert('You are already logged in. Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'HTML/page.html';
+                }, 2000);
+            }
+            
+            // Add input animations
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.parentElement.classList.remove('focused');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

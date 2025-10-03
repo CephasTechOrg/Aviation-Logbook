@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyLog Pro | Pilot Logbook</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <script defer src="../js/script.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-plane-departure"></i>
+                    </div>
+                    <div>
+                        <div class="logo-text">SkyLog Pro</div>
+                        <div class="logo-subtitle">Professional Pilot Logbook</div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                    </button>
+                    <button class="btn btn-outline" id="exportBtn">
+                        <i class="fas fa-file-export"></i> Export
+                    </button>
+                    <button class="btn btn-outline" id="importBtn">
+                        <i class="fas fa-file-import"></i> Import
+                    </button>
+                    <button class="btn btn-primary" id="newFlightBtn">
+                        <i class="fas fa-plus"></i> New Flight
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="dashboard">
+            <section class="form-section" id="formSection">
+                <h2 class="section-title">
+                    <i class="fas fa-pen-alt"></i> Flight Entry
+                </h2>
+                <form id="flightForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="date" class="form-label">Date of Flight</label>
+                            <input type="date" id="date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aircraftType" class="form-label">Aircraft Type & Registration</label>
+                            <input type="text" id="aircraftType" class="form-control" placeholder="e.g., Cessna 172, N12345" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="departure" class="form-label">Departure Airport</label>
+                            <input type="text" id="departure" class="form-control" placeholder="e.g., KJFK" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="destination" class="form-label">Destination Airport</label>
+                            <input type="text" id="destination" class="form-control" placeholder="e.g., KLAX" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="flightTime" class="form-label">Flight Time (hours)</label>
+                            <input type="number" id="flightTime" class="form-control" min="0" step="0.1" placeholder="e.g., 1.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dayNight" class="form-label">Day/Night</label>
+                            <select id="dayNight" class="form-control" required>
+                                <option value="">Select</option>
+                                <option value="Day">Day</option>
+                                <option value="Night">Night</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pilotRole" class="form-label">Pilot Role</label>
+                            <select id="pilotRole" class="form-control" required>
+                                <option value="">Select</option>
+                                <option value="PIC">Pilot in Command (PIC)</option>
+                                <option value="Co-Pilot">Co-Pilot</option>
+                                <option value="Student">Student</option>
+                                <option value="Instructor">Instructor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="remarks" class="form-label">Remarks or Notes</label>
+                            <textarea id="remarks" class="form-control" rows="3" placeholder="Any additional notes..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <i class="fas fa-save"></i> Save Flight
+                        </button>
+                        <button type="button" class="btn btn-secondary hidden" id="cancelBtn">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="stats-section">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i> Flight Statistics
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalFlights">0</div>
+                        <div class="stat-label">Total Flights</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> <span id="flightsChange">0%</span> from last month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalHours">0.0</div>
+                        <div class="stat-label">Total Flight Hours</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> <span id="hoursChange">0%</span> from last month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="dayFlights">0</div>
+                        <div class="stat-label">Day Flights</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="nightFlights">0</div>
+                        <div class="stat-label">Night Flights</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="entries-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-list-alt"></i> Flight Log
+                </h2>
+                <div class="search-sort">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search by aircraft or airport...">
+                        <span class="search-icon"><i class="fas fa-search"></i></span>
+                    </div>
+                    <div class="sort-options">
+                        <select id="sortSelect">
+                            <option value="date-desc">Date (Newest First)</option>
+                            <option value="date-asc">Date (Oldest First)</option>
+                            <option value="time-desc">Flight Time (High to Low)</option>
+                            <option value="time-asc">Flight Time (Low to High)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="flightsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Aircraft</th>
+                            <th>Route</th>
+                            <th>Time</th>
+                            <th>Day/Night</th>
+                            <th>Role</th>
+                            <th>Remarks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="flightsTableBody">
+                        <!-- Flight entries will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cards-container" id="flightsCardsContainer">
+                <!-- Flight cards will be populated here for mobile view -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm Deletion</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this flight record? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelDelete">Cancel</button>
+                <button class="btn btn-danger" id="confirmDelete">Delete Flight</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Export Flight Log</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Choose the format for exporting your flight log:</p>
+                <div class="form-group mt-2">
+                    <label for="exportFormat" class="form-label">Export Format</label>
+                    <select id="exportFormat" class="form-control">
+                        <option value="csv">CSV (Comma Separated Values)</option>
+                        <option value="json">JSON (JavaScript Object Notation)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelExport">Cancel</button>
+                <button class="btn btn-primary" id="confirmExport">Export Data</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">
+                    &copy; 2023 SkyLog Pro. All rights reserved.
+                </div>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
